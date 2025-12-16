@@ -18,8 +18,6 @@
  *    shallowCopy({}) => {}
  */
 function shallowCopy(obj) {
-  // throw new Error('Not implemented');
-  // const copy = Object.assign({}, { ...obj });
   return { ...obj };
 }
 
@@ -34,8 +32,22 @@ function shallowCopy(obj) {
  *    mergeObjects([{a: 1, b: 2}, {b: 3, c: 5}]) => {a: 1, b: 5, c: 5}
  *    mergeObjects([]) => {}
  */
-function mergeObjects(/* objects */) {
-  throw new Error('Not implemented');
+function mergeObjects(objects) {
+  return objects.reduce((accumulator, currentObject) => {
+    Object.keys(currentObject).forEach((key) => {
+      if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
+        if (
+          Object.prototype.hasOwnProperty.call(accumulator, key) &&
+          typeof accumulator[key] === 'number'
+        ) {
+          accumulator[key] += currentObject[key];
+        } else {
+          accumulator[key] = currentObject[key];
+        }
+      }
+    });
+    return accumulator;
+  }, {});
 }
 
 /**
