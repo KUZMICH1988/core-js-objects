@@ -35,17 +35,8 @@ function shallowCopy(obj) {
  */
 function mergeObjects(objects) {
   return objects.reduce((accumulator, currentObject) => {
-    Object.keys(currentObject).forEach((key) => {
-      if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
-        if (
-          Object.prototype.hasOwnProperty.call(accumulator, key) &&
-          typeof accumulator[key] === 'number'
-        ) {
-          accumulator[key] += currentObject[key];
-        } else {
-          accumulator[key] = currentObject[key];
-        }
-      }
+    Object.entries(currentObject).forEach(([key, value]) => {
+      accumulator[key] = (accumulator[key] || 0) + value;
     });
     return accumulator;
   }, {});
@@ -334,8 +325,18 @@ function sortCitiesArray(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  // throw new Error('Not implemented');
+  const resultMap = new Map();
+  array.forEach((item) => {
+    const key = keySelector(item);
+    const value = valueSelector(item);
+    if (!resultMap.has(key)) {
+      resultMap.set(key, []);
+    }
+    resultMap.get(key).push(value);
+  });
+  return resultMap;
 }
 
 /**
